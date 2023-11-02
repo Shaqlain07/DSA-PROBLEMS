@@ -1,10 +1,16 @@
-class Solution {
-public:
-    //works only for possitive integer
-    int minimumDifference(vector<int>& nums) {
-        int n=nums.size();
+//{ Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+// } Driver Code Ends
+class Solution{
+
+  public:
+	int minDifference(int nums[], int n)  { 
+	    // Your code goes here
+	   
         int totalSum=0;
-        for(int i=0;i<nums.size();i++) {
+        for(int i=0;i<n;i++) {
             totalSum+=nums[i];
         }
         vector<vector<int>> dp(n+1,vector<int>(totalSum+1,false));
@@ -12,12 +18,12 @@ public:
             dp[i][0]=true;
         }
         //for every index we are storing with every target
-        for(int i=n-1;i>=0;i--) {
+        for(int i=1;i<=n;i++) {
             for(int j=1;j<=totalSum;j++) {
-                bool skip=dp[i+1][j];
+                bool skip=dp[i-1][j];
                 bool take=false;
-                if(j>=nums[i]) {
-                    take=dp[i+1][j-nums[i]];
+                if(j>=nums[i-1]) {
+                    take=dp[i-1][j-nums[i-1]];
                 }
                 dp[i][j]=skip || take;
             }
@@ -29,5 +35,32 @@ public:
             }
         }
         return mn;
-    }
+	} 
 };
+
+
+//{ Driver Code Starts.
+int main() 
+{
+   
+   
+   	int t;
+    cin >> t;
+    while (t--)
+    {
+        int n;
+        cin >> n;
+
+        int a[n];
+        for(int i = 0; i < n; i++)
+        	cin >> a[i];
+
+       
+
+	    Solution ob;
+	    cout << ob.minDifference(a, n) << "\n";
+	     
+    }
+    return 0;
+}
+// } Driver Code Ends
