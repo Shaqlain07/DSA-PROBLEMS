@@ -6,35 +6,42 @@ using namespace std;
 class Solution{
 
   public:
-	int minDifference(int nums[], int n)  { 
+	int minDifference(int arr[], int n)  { 
 	    // Your code goes here
-	   
-        int totalSum=0;
-        for(int i=0;i<n;i++) {
-            totalSum+=nums[i];
-        }
-        vector<vector<int>> dp(n+1,vector<int>(totalSum+1,false));
-        for(int i=0;i<=n;i++) {
-            dp[i][0]=true;
-        }
-        //for every index we are storing with every target
-        for(int i=1;i<=n;i++) {
-            for(int j=1;j<=totalSum;j++) {
-                bool skip=dp[i-1][j];
-                bool take=false;
-                if(j>=nums[i-1]) {
-                    take=dp[i-1][j-nums[i-1]];
-                }
-                dp[i][j]=skip || take;
-            }
-        }
-        int mn=INT_MAX;
-        for(int i=0;i<=totalSum;i++) {
-            if(dp[n-1][i]==true) {
-                mn=min(mn,abs((totalSum-i)-i));
-            }
-        }
-        return mn;
+	    int total=0;
+	    for(int i=0;i<n;i++) {
+	        total+=arr[i];
+	    }
+	    // till index, can we acheive this particular target
+	    vector<vector<int>> dp(n,vector<int>(total+1,false));
+	    // if our target is 0 then for every index we can achieve the target by picking no element
+	    for(int i=0;i<n;i++) dp[i][0]=true;
+	    // if our index is at 0 then then we will check target is arr[0]
+	    if(total>=arr[0]) dp[0][arr[0]]=true;
+	    for(int i=1;i<n;i++) {
+	        for(int j=1;j<=total;j++) {
+	            // not take..so it will depend upon previous dp
+	            bool not_take=dp[i-1][j];
+	            // take
+	            bool take=false;
+	            if(j>=arr[i]) {
+	                // we go to previous dp and decrese the target arr[i], then check
+	                take=dp[i-1][j-arr[i]];
+	            }
+	            dp[i][j]=take|| not_take;
+	        }
+	    }
+	    // interating on every target, 
+	    int mn=INT_MAX;
+	    for(int i=0;i<=total;i++) {
+	        if(dp[n-1][i]==true) {
+	            int s1=i;
+	            int s2=total-s1;
+	            mn=min(mn,abs(s1-s2));
+	        }
+	    }
+	    return mn;
+	    
 	} 
 };
 
